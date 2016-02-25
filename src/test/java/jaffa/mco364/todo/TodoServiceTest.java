@@ -18,8 +18,8 @@ public class TodoServiceTest {
 	@Test
 	public void testListTodos() throws IOException {
 		Retrofit retrofit = new Retrofit.Builder()
-		.baseUrl("http://jsonplaceholder.typicode.com")
-		.addConverterFactory(GsonConverterFactory.create()).build();
+				.baseUrl("http://jsonplaceholder.typicode.com")
+				.addConverterFactory(GsonConverterFactory.create()).build();
 
 		TodoService service = retrofit.create(TodoService.class);
 
