@@ -1,43 +1,50 @@
 package jaffa.mco364.paint;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
 
+	private Stack<BufferedImage> undo;
+	private Stack<BufferedImage> redo;
 	private BufferedImage buffer;
 	private Tool tool;
+	private BufferedImage newBuffer;
 
 	public Canvas() {
 
+		tool = new PencilTool(Color.black);
+
+		undo = new Stack<BufferedImage>();
+		redo = new Stack<BufferedImage>();
+
 		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-		tool = new OvalTool();
 
 		this.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent event) {
-				// TODO Auto-generated method stub
 
 			}
 
 			public void mouseEntered(MouseEvent event) {
-				// TODO Auto-generated method stub
 
 			}
 
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			public void mousePressed(MouseEvent event) {
+				copyImage(undo);
 				tool.mousePressed(buffer.getGraphics(), event.getX(),
-						event.getY());
+						event.getY(), buffer);
 				repaint();
 			}
 
@@ -69,7 +76,53 @@ public class Canvas extends JPanel {
 		g.drawImage(buffer, 0, 0, null);
 		// only allowed to make changes and draw to graphic component in paint
 		// component
-		// thtas why we have to put draw preview in this method.
+		// thats why we have to put draw preview in this method.
 		tool.drawPreview(g);
+	}
+
+	public void setTool(Tool tool) {
+		this.tool = tool;
+	}
+
+	public void setColor(Color color) {
+		tool.setColor(color);
+	}
+
+	public BufferedImage getBuffer() {
+		return buffer;
+	}
+
+	public void undo() {
+		if (!undo.isEmpty()) {
+			copyImage(redo);
+			buffer = undo.pop();
+		}
+		repaint();
+	}
+
+	public void redo() {
+		if (!redo.isEmpty()) {
+			buffer = redo.pop();
+			copyImage(undo);
+		}
+		repaint();
+	}
+
+	public boolean undoIsEmpty() {
+		return undo.isEmpty();
+	}
+
+	public boolean redoIsEmpty() {
+		return redo.isEmpty();
+	}
+
+	public BufferedImage copyImage(Stack<BufferedImage> stack) {
+		BufferedImage copy = new BufferedImage(buffer.getWidth(),
+				buffer.getHeight(), buffer.getType());
+		Graphics g = copy.getGraphics();
+		g.drawImage(buffer, 0, 0, null);
+		g.dispose();
+		stack.push(copy);
+		return copy;
 	}
 }
