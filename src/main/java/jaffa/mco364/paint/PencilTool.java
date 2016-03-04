@@ -1,43 +1,41 @@
 package jaffa.mco364.paint;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class PencilTool implements Tool {
+public class PencilTool extends Tool {
 
 	private int x;
 	private int y;
-	private Color color;
 
-	public PencilTool(Color c) {
-		this.color = c;
+	public PencilTool(PaintProperties properties) {
+		super(properties);
 	}
 
+	@Override
 	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
-		g.setColor(color);
+		g.setColor(properties.getColor());
 		g.fillOval(x, y, 1, 1);
 		this.x = x;
 		this.y = y;
 	}
 
+	@Override
 	public void mouseReleased(Graphics g, int x, int y) {
 
 	}
 
+	@Override
 	public void mouseDragged(Graphics g, int x, int y) {
-		g.setColor(color);
+		g.setColor(properties.getColor());
 		g.drawLine(this.x, this.y, x, y);
 		this.x = x;
 		this.y = y;
 	}
 
+	@Override
 	public void drawPreview(Graphics g) {
 
-	}
-
-	public void setColor(Color c) {
-		this.color = c;
 	}
 
 }

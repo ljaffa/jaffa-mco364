@@ -16,16 +16,18 @@ public class Canvas extends JPanel {
 	private Stack<BufferedImage> redo;
 	private BufferedImage buffer;
 	private Tool tool;
-	private BufferedImage newBuffer;
 
-	public Canvas() {
+	private PaintProperties properties;
 
-		tool = new PencilTool(Color.black);
+	public Canvas(PaintProperties properties) {
+
+		this.properties = properties;
+		tool = new PencilTool(properties);
 
 		undo = new Stack<BufferedImage>();
 		redo = new Stack<BufferedImage>();
 
-		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+		buffer = properties.getImage();
 
 		this.addMouseListener(new MouseListener() {
 
@@ -85,7 +87,11 @@ public class Canvas extends JPanel {
 	}
 
 	public void setColor(Color color) {
-		tool.setColor(color);
+		properties.getColor();
+	}
+
+	public PaintProperties getProperties() {
+		return properties;
 	}
 
 	public BufferedImage getBuffer() {

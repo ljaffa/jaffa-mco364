@@ -1,19 +1,24 @@
 package jaffa.mco364.paint;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public interface Tool {
+public abstract class Tool {
 
-	void mousePressed(Graphics g, int x, int y, BufferedImage image);
+	protected PaintProperties properties;
 
-	void mouseReleased(Graphics g, int x, int y);
+	public Tool(PaintProperties properties) {
+		this.properties = properties;
+	}
 
-	void mouseDragged(Graphics g, int x, int y);
+	abstract void mousePressed(Graphics g, int x, int y, BufferedImage image);
 
-	void drawPreview(Graphics g);
+	abstract void mouseReleased(Graphics g, int x, int y);
 
-	void setColor(Color c);
+	abstract void mouseDragged(Graphics g, int x, int y);
+
+	abstract void drawPreview(Graphics g);
+
+	// void setColor(Color c);
 
 }

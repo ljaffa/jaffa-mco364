@@ -30,10 +30,15 @@ public class PaintFrame extends JFrame {
 	private Canvas canvas;
 	private Color color;
 
+	private PaintProperties properties;
+	private Tool tool;
+
 	public PaintFrame() {
 		setTitle("PAINT");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		properties = new PaintProperties();
 
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
@@ -42,12 +47,14 @@ public class PaintFrame extends JFrame {
 		undoRedoPanel = new JPanel();
 		undoRedoPanel.setLayout(new FlowLayout());
 
-		undoButton = new JButton(new ImageIcon("undoButton2.jpe"));
+		undoButton = new JButton(new ImageIcon(getClass().getResource(
+				"/undoButton2.jpe")));
 		undoButton.setPreferredSize(new Dimension(50, 50));
 		undoButton.setBackground(Color.WHITE);
 		undoButton.setEnabled(true);
 
-		redoButton = new JButton(new ImageIcon("redo2.jpg"));
+		redoButton = new JButton(new ImageIcon(getClass().getResource(
+				"/redo2.jpg")));
 		redoButton.setPreferredSize(new Dimension(50, 50));
 		redoButton.setBackground(Color.WHITE);
 		redoButton.setEnabled(false);
@@ -58,46 +65,65 @@ public class PaintFrame extends JFrame {
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 
-		pencilButton = new JButton();
-		pencilButton.setIcon(new ImageIcon(format(40, 30, "pencil2.png")));
-		pencilButton.setPreferredSize(new Dimension(50, 50));
-		pencilButton.setBackground(Color.WHITE);
+		ActionListener listener = new ActionListener() {
 
-		boxButton = new JButton();
-		boxButton.setIcon(new ImageIcon(format(40, 30, "rectangle.jpe")));
-		boxButton.setPreferredSize(new Dimension(50, 50));
-		boxButton.setBackground(Color.WHITE);
+			public void actionPerformed(ActionEvent event) {
+				ToolButton button = (ToolButton) event.getSource();
+				canvas.setTool(button.getTool());
+			}
 
-		bucketButton = new JButton();
-		bucketButton.setIcon(new ImageIcon(format(40, 30, "bucket2.png")));
-		bucketButton.setPreferredSize(new Dimension(50, 50));
-		bucketButton.setBackground(Color.WHITE);
+		};
 
-		lineButton = new JButton();
-		lineButton.setIcon(new ImageIcon(format(40, 30, "lineTool.png")));
-		lineButton.setPreferredSize(new Dimension(50, 50));
-		lineButton.setBackground(Color.WHITE);
+		ToolButton buttons[] = new ToolButton[] {
+				new ToolButton(new PencilTool(properties), "/pencil2.png"),
+				new ToolButton(new LineTool(properties), "/lineTool.png"),
+				new ToolButton(new BoxTool(properties), "/rectangle.jpe"),
+				new ToolButton(new OvalTool(properties), "/ovalTool.jpe"),
+				new ToolButton(new BucketTool(properties), "/bucket2.png"), };
 
-		ovalButton = new JButton();
-		ovalButton.setIcon(new ImageIcon(format(40, 30, "ovalTool.jpe")));
-		ovalButton.setPreferredSize(new Dimension(50, 50));
-		ovalButton.setBackground(Color.WHITE);
+		for (ToolButton button : buttons) {
+			buttonPanel.add(button);
+			button.addActionListener(listener);
+		}
 
-		colorButton = new JButton();
-		colorButton.setIcon(new ImageIcon(format(40, 30, "color.jpg")));
+		/*
+		 * pencilButton = new ToolButton(new PencilTool(properties),
+		 * "/pencil2.png"); pencilButton.setPreferredSize(new Dimension(50,
+		 * 50)); pencilButton.setBackground(Color.WHITE);
+		 * 
+		 * boxButton = new ToolButton(new BoxTool(properties),
+		 * "/rectangle.jpe"); boxButton.setPreferredSize(new Dimension(50, 50));
+		 * boxButton.setBackground(Color.WHITE);
+		 * 
+		 * bucketButton = new ToolButton(new BucketTool(properties),
+		 * "/bucket2.png"); bucketButton.setPreferredSize(new Dimension(50,
+		 * 50)); bucketButton.setBackground(Color.WHITE);
+		 * 
+		 * lineButton = new ToolButton(new LineTool(properties),
+		 * "/lineTool.png"); lineButton.setPreferredSize(new Dimension(50, 50));
+		 * lineButton.setBackground(Color.WHITE);
+		 * 
+		 * ovalButton = new ToolButton(new OvalTool(properties),
+		 * "/ovalTool.jpe"); ovalButton.setPreferredSize(new Dimension(50, 50));
+		 * ovalButton.setBackground(Color.WHITE);
+		 */
+
+		colorButton = new JButton(new ImageIcon(getClass().getResource(
+				"/color.jpg")));
+		// colorButton.setIcon(new ImageIcon(format(40, 30, "color.jpg")));
 		colorButton.setPreferredSize(new Dimension(50, 50));
 		colorButton.setBackground(Color.WHITE);
-
-		buttonPanel.add(pencilButton);
-		buttonPanel.add(lineButton);
-		buttonPanel.add(boxButton);
-		buttonPanel.add(ovalButton);
-		buttonPanel.add(bucketButton);
 		buttonPanel.add(colorButton);
+
+		/*
+		 * buttonPanel.add(pencilButton); buttonPanel.add(lineButton);
+		 * buttonPanel.add(boxButton); buttonPanel.add(ovalButton);
+		 * buttonPanel.add(bucketButton); buttonPanel.add(colorButton);
+		 */
 
 		this.color = Color.BLACK;
 
-		canvas = new Canvas();
+		canvas = new Canvas(properties);
 		add(canvas, BorderLayout.CENTER);
 		add(undoRedoPanel, BorderLayout.PAGE_END);
 		add(buttonPanel, BorderLayout.PAGE_START);
@@ -126,67 +152,25 @@ public class PaintFrame extends JFrame {
 
 		});
 
-		pencilButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				PencilTool pencil = new PencilTool(color);
-				canvas.setTool(pencil);
-				undoButton.setEnabled(true);
-			}
-
-		});
-
-		lineButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				LineTool line = new LineTool(color);
-				canvas.setTool(line);
-				undoButton.setEnabled(true);
-			}
-
-		});
-
-		boxButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				BoxTool box = new BoxTool(color);
-				canvas.setTool(box);
-				undoButton.setEnabled(true);
-			}
-
-		});
-
-		ovalButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				OvalTool oval = new OvalTool(color);
-				canvas.setTool(oval);
-				undoButton.setEnabled(true);
-			}
-
-		});
-
-		bucketButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				BucketTool bucket = new BucketTool(color);
-				canvas.setTool(bucket);
-				undoButton.setEnabled(true);
-			}
-
-		});
-
 		colorButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				color = JColorChooser.showDialog(colorButton, "Choose a color",
 						color);
 				if (color != null) {
-					canvas.setColor(color);
+					properties.setColor(color);
 				}
 			}
 
 		});
+
+		/*
+		 * pencilButton.addActionListener(listener);
+		 * lineButton.addActionListener(listener);
+		 * boxButton.addActionListener(listener);
+		 * ovalButton.addActionListener(listener);
+		 * bucketButton.addActionListener(listener);
+		 */
 
 	}
 
