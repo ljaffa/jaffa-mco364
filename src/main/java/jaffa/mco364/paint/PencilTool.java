@@ -1,7 +1,6 @@
 package jaffa.mco364.paint;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class PencilTool extends Tool {
 
@@ -13,7 +12,7 @@ public class PencilTool extends Tool {
 	}
 
 	@Override
-	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
+	public void mousePressed(Graphics g, int x, int y) {
 		g.setColor(properties.getColor());
 		g.fillOval(x, y, 1, 1);
 		this.x = x;

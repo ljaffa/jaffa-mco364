@@ -8,8 +8,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.JPanel;
 
+@Singleton
 public class Canvas extends JPanel {
 
 	private Stack<BufferedImage> undo;
@@ -19,7 +22,8 @@ public class Canvas extends JPanel {
 
 	private PaintProperties properties;
 
-	public Canvas(PaintProperties properties) {
+	@Inject
+	public Canvas(final PaintProperties properties) {
 
 		this.properties = properties;
 		tool = new PencilTool(properties);
@@ -27,7 +31,7 @@ public class Canvas extends JPanel {
 		undo = new Stack<BufferedImage>();
 		redo = new Stack<BufferedImage>();
 
-		buffer = properties.getImage();
+		// buffer = properties.getImage();
 
 		this.addMouseListener(new MouseListener() {
 
@@ -45,14 +49,14 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent event) {
 				copyImage(undo);
-				tool.mousePressed(buffer.getGraphics(), event.getX(),
-						event.getY(), buffer);
+				tool.mousePressed(properties.getImage().getGraphics(),
+						event.getX(), event.getY());
 				repaint();
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(buffer.getGraphics(), event.getX(),
-						event.getY());
+				tool.mouseReleased(properties.getImage().getGraphics(),
+						event.getX(), event.getY());
 				repaint();
 			}
 		});
@@ -60,8 +64,8 @@ public class Canvas extends JPanel {
 		addMouseMotionListener(new MouseMotionListener() {
 
 			public void mouseDragged(MouseEvent event) {
-				tool.mouseDragged(buffer.getGraphics(), event.getX(),
-						event.getY());
+				tool.mouseDragged(properties.getImage().getGraphics(),
+						event.getX(), event.getY());
 				repaint();
 			}
 
@@ -123,8 +127,9 @@ public class Canvas extends JPanel {
 	}
 
 	public BufferedImage copyImage(Stack<BufferedImage> stack) {
-		BufferedImage copy = new BufferedImage(buffer.getWidth(),
-				buffer.getHeight(), buffer.getType());
+		BufferedImage copy = new BufferedImage(
+				properties.getImage().getWidth(), properties.getImage()
+						.getHeight(), properties.getImage().getType());
 		Graphics g = copy.getGraphics();
 		g.drawImage(buffer, 0, 0, null);
 		g.dispose();

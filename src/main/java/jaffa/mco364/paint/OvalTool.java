@@ -1,7 +1,6 @@
 package jaffa.mco364.paint;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class OvalTool extends Tool {
 
@@ -18,7 +17,7 @@ public class OvalTool extends Tool {
 	}
 
 	@Override
-	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
+	public void mousePressed(Graphics g, int x, int y) {
 		this.x1 = x;
 		this.y1 = y;
 		this.x2 = x;
