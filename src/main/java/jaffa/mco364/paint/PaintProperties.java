@@ -25,6 +25,7 @@ public class PaintProperties {
 		this.image = new BufferedImage(this.width, this.height,
 				BufferedImage.TYPE_INT_ARGB);
 		this.color = Color.BLACK;
+		this.weight = 2;
 		// this.stroke = new BasicStroke(1);
 	}
 
