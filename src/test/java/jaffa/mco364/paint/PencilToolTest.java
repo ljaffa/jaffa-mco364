@@ -2,6 +2,7 @@ package jaffa.mco364.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -17,7 +18,7 @@ public class PencilToolTest {
 
 		PencilTool tool = new PencilTool(properties);
 
-		Graphics g = Mockito.mock(Graphics.class);
+		Graphics2D g = (Graphics2D) Mockito.mock(Graphics.class);
 		tool.mousePressed(g, 5, 5);
 		tool.mouseReleased(g, 10, 10);
 
@@ -35,7 +36,7 @@ public class PencilToolTest {
 
 		PencilTool tool = new PencilTool(properties);
 
-		Graphics g = Mockito.mock(Graphics.class);
+		Graphics2D g = (Graphics2D) Mockito.mock(Graphics.class);
 
 		tool.mousePressed(g, 6, 1);
 		tool.mouseDragged(g, 9, 7);

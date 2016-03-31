@@ -50,14 +50,14 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent event) {
 				copyImage(undo);
-				tool.mousePressed(buffer.getGraphics(), event.getX(),
-						event.getY());
+				tool.mousePressed((Graphics2D) buffer.getGraphics(),
+						event.getX(), event.getY());
 				repaint();
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(buffer.getGraphics(), event.getX(),
-						event.getY());
+				tool.mouseReleased((Graphics2D) buffer.getGraphics(),
+						event.getX(), event.getY());
 				repaint();
 			}
 		});
@@ -65,8 +65,8 @@ public class Canvas extends JPanel {
 		addMouseMotionListener(new MouseMotionListener() {
 
 			public void mouseDragged(MouseEvent event) {
-				tool.mouseDragged(buffer.getGraphics(), event.getX(),
-						event.getY());
+				tool.mouseDragged((Graphics2D) buffer.getGraphics(),
+						event.getX(), event.getY());
 				repaint();
 			}
 
@@ -84,7 +84,7 @@ public class Canvas extends JPanel {
 		// only allowed to make changes and draw to graphic component in paint
 		// component
 		// thats why we have to put draw preview in this method.
-		tool.drawPreview(g);
+		tool.drawPreview((Graphics2D) g);
 	}
 
 	public void setTool(Tool tool) {
