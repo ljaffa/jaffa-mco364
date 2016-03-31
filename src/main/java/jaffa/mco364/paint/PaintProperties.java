@@ -1,5 +1,6 @@
 package jaffa.mco364.paint;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
@@ -12,11 +13,11 @@ public class PaintProperties {
 	private int width; // width and height of canvas
 	private int height;
 	private Color color;
-	private int weight;
+	// private int weight;
 	private boolean fill;
 	private BufferedImage image;
 
-	// private BasicStroke stroke;
+	private BasicStroke stroke;
 
 	@Inject
 	public PaintProperties() {
@@ -25,8 +26,8 @@ public class PaintProperties {
 		this.image = new BufferedImage(this.width, this.height,
 				BufferedImage.TYPE_INT_ARGB);
 		this.color = Color.BLACK;
-		this.weight = 2;
-		// this.stroke = new BasicStroke(1);
+		// this.weight = 2;
+		this.stroke = new BasicStroke(6);
 	}
 
 	public int getWidth() {
@@ -53,12 +54,12 @@ public class PaintProperties {
 		this.color = color;
 	}
 
-	public int getWeight() {
-		return weight;
+	public BasicStroke getStroke() {
+		return stroke;
 	}
 
 	public void setWeight(int weight) {
-		this.weight = weight;
+		this.stroke = new BasicStroke(weight);
 	}
 
 	public boolean isFill() {
