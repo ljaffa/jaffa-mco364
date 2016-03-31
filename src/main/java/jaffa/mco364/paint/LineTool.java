@@ -27,7 +27,7 @@ public class LineTool extends Tool {
 	@Override
 	public void mouseReleased(Graphics g, int x, int y) {
 		g.setColor(properties.getColor());
-		g.drawLine(x1, y1, x, y);
+		g.drawLine(this.x1, this.y1, x, y);
 	}
 
 	@Override

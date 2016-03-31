@@ -11,13 +11,15 @@ public class BucketTool extends Tool {
 
 	public BucketTool(PaintProperties properties) {
 		super(properties);
-		// this.buffer = properties.getImage();
+		this.buffer = properties.getImage();
 	}
 
 	@Override
 	public void mousePressed(Graphics g, int x, int y) {
-		fillColor(x, y, properties.getColor().getRGB(x, y), properties
-				.getColor().getRGB(), properties.getImage());
+		fillColor(x, y, buffer.getRGB(x, y), properties.getColor().getRGB(),
+				buffer);
+		// fillColor(x, y, properties.getImage().getRGB(x, y), properties
+		// .getColor().getRGB(), properties.getImage());
 		// Image img = properties.getImage();
 		// Color color = img.getRGB();
 		// fillColor(x, y, properties.getImage().getRGB());
@@ -40,6 +42,10 @@ public class BucketTool extends Tool {
 
 	private void fillColor(int x, int y, int srcColor, int targetColor,
 			BufferedImage image) {
+		if (srcColor == targetColor) {
+			return;
+		}
+
 		Queue<Point> queue = new LinkedList<Point>();
 
 		queue.add(new Point(x, y));

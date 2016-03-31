@@ -2,6 +2,7 @@ package jaffa.mco364.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,7 +24,7 @@ public class Canvas extends JPanel {
 	private PaintProperties properties;
 
 	@Inject
-	public Canvas(final PaintProperties properties) {
+	public Canvas(PaintProperties properties) {
 
 		this.properties = properties;
 		tool = new PencilTool(properties);
@@ -31,7 +32,7 @@ public class Canvas extends JPanel {
 		undo = new Stack<BufferedImage>();
 		redo = new Stack<BufferedImage>();
 
-		// buffer = properties.getImage();
+		buffer = properties.getImage();
 
 		this.addMouseListener(new MouseListener() {
 
@@ -49,14 +50,14 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent event) {
 				copyImage(undo);
-				tool.mousePressed(properties.getImage().getGraphics(),
-						event.getX(), event.getY());
+				tool.mousePressed(buffer.getGraphics(), event.getX(),
+						event.getY());
 				repaint();
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(properties.getImage().getGraphics(),
-						event.getX(), event.getY());
+				tool.mouseReleased(buffer.getGraphics(), event.getX(),
+						event.getY());
 				repaint();
 			}
 		});
@@ -64,8 +65,8 @@ public class Canvas extends JPanel {
 		addMouseMotionListener(new MouseMotionListener() {
 
 			public void mouseDragged(MouseEvent event) {
-				tool.mouseDragged(properties.getImage().getGraphics(),
-						event.getX(), event.getY());
+				tool.mouseDragged(buffer.getGraphics(), event.getX(),
+						event.getY());
 				repaint();
 			}
 
@@ -126,14 +127,13 @@ public class Canvas extends JPanel {
 		return redo.isEmpty();
 	}
 
-	public BufferedImage copyImage(Stack<BufferedImage> stack) {
-		BufferedImage copy = new BufferedImage(
-				properties.getImage().getWidth(), properties.getImage()
-						.getHeight(), properties.getImage().getType());
-		Graphics g = copy.getGraphics();
+	public void copyImage(Stack<BufferedImage> stack) {
+		BufferedImage copy = new BufferedImage(buffer.getWidth(),
+				buffer.getHeight(), buffer.getType());
+		Graphics2D g = copy.createGraphics();
 		g.drawImage(buffer, 0, 0, null);
 		g.dispose();
 		stack.push(copy);
-		return copy;
+		// return copy;
 	}
 }

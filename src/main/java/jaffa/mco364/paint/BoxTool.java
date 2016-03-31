@@ -23,28 +23,32 @@ public class BoxTool extends Tool {
 		this.y1 = y;
 		this.x2 = x;
 		this.y2 = y;
+		width = 0;
+		height = 0;
 	}
 
 	@Override
 	public void mouseReleased(Graphics g, int x, int y) {
 		g.setColor(properties.getColor());
-		width = x - x1;
-		height = y - y1;
-		g.drawRect(x1, y1, width, height);
+		x2 = x;
+		y2 = y;
+		width = Math.abs(x2 - x1);
+		height = Math.abs(y2 - y1);
+		g.drawRect(Math.min(x1, x2), Math.min(y1, y2), width, height);
 	}
 
 	@Override
 	public void mouseDragged(Graphics g, int x, int y) {
 		this.x2 = x;
 		this.y2 = y;
+		width = Math.abs(x2 - x1);
+		height = Math.abs(y2 - y1);
 	}
 
 	@Override
 	public void drawPreview(Graphics g) {
 		g.setColor(properties.getColor());
-		width = x2 - x1;
-		height = y2 - y1;
-		g.drawRect(x1, y1, width, height);
+		g.drawRect(Math.min(x1, x2), Math.min(y1, y2), width, height);
 	}
 
 }

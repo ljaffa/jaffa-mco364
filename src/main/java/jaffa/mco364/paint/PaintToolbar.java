@@ -1,5 +1,6 @@
 package jaffa.mco364.paint;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -19,14 +20,14 @@ public class PaintToolbar extends Container {
 
 	private JPanel canvasPanel;
 
-	private JButton pencilButton, ovalButton, boxButton, lineButton,
-	bucketButton, colorButton;
+	private JButton colorButton;
 
 	private Color color;
 
 	@Inject
 	public PaintToolbar(final Canvas canvas, final PaintProperties properties) {
 		setLayout(new FlowLayout());
+		canvasPanel = new JPanel();
 
 		ActionListener listener = new ActionListener() {
 
@@ -53,9 +54,6 @@ public class PaintToolbar extends Container {
 				"/color.jpg")));
 		colorButton.setPreferredSize(new Dimension(50, 50));
 		colorButton.setBackground(Color.WHITE);
-		add(colorButton);
-
-		this.color = Color.BLACK;
 
 		colorButton.addActionListener(new ActionListener() {
 
@@ -69,8 +67,11 @@ public class PaintToolbar extends Container {
 
 		});
 
-		// canvasPanel = new JPanel();
+		canvasPanel.add(colorButton);
 
+		this.color = Color.BLACK;
+
+		add(canvasPanel, BorderLayout.PAGE_START);
 	}
 
 }
