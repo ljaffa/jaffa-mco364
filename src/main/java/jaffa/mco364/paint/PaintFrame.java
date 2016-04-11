@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.swing.ImageIcon;
@@ -87,6 +91,13 @@ public class PaintFrame extends JFrame {
 	};
 
 	public static void main(String[] args) {
+		// changing log level
+		Logger logger = Logger.getLogger("jaffa.mco364.paint");
+		logger.setLevel(Level.FINE); // only displays fine and above
+		Handler handler = new ConsoleHandler();
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+
 		Injector injector = Guice.createInjector(new PaintModule());
 		PaintFrame p = injector.getInstance(PaintFrame.class);
 	}
